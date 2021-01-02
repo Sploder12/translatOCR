@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="{{ url_for('static', filename='style.css') }}" type="text/css" rel="stylesheet">
+    <title>Video Test</title>
+	<link rel="icon" href="https://spatialflunky1.github.io/favicon.png">
+  </head>
+  <body>
+    <div>
+      <h1><em>Video Test</em></h1>
+      <img src="{{ url_for('video_feed') }}">
+    </div>
+  </body>
+</html>
