@@ -6,4 +6,6 @@
 #### Python 3
 #### Flask
 #### Opencv
+#### NumPy
+#### imutils
 

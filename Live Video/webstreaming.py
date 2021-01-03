@@ -1,8 +1,6 @@
 from pyimagesearch.motion_detection import singlemotiondetector
 from imutils.video import VideoStream
-from flask import Response
-from flask import Flask
-from flask import render_template
+from flask import Response, Flask, render_template
 import threading
 import argparse
 import datetime
@@ -55,12 +53,23 @@ def video_feed():
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--ip", type=str, required=True, help="ip address of the device")
-    ap.add_argument("-o", "--port", type=int, required=True, help="ephmeral port number of the server (1024 to 65535)")
+    ip = input("Enter the IP: ")
+    port = int(input("Enter the Port: "))
     ap.add_argument("-f", "--frame-count", type=int, default=32, help="number of frames used to construct the bacground model")
     args = vars(ap.parse_args())
     t = threading.Thread(target=detect_motion, args=(args["frame_count"],))
     t.daemon = True
     t.start()
-    app.run(host=args["ip"], port=args["port"], debug=False, threaded=True, use_reloader=False)
+    x = 0
+    while x == 0:
+        debug = input("Debug Mode (changes to local only)? (y/n): ")
+        if debug == "y" or debug == "n":
+            x = 1
+        else:
+            print("Invalid Response")
+    if debug == "y":
+        debug = True
+    elif debug == "n":
+        debug == False
+    app.run(host=ip, port=port, debug=debug, threaded=True, use_reloader=False)
 vs.stop()
