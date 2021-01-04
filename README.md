@@ -10,9 +10,13 @@
 - [ ] Translating
 
 ## Dependencies:
-#### Python 3
-#### Flask
-#### OpenCV
-#### NumPy
-#### imutils
+* Python 3
+
+* Flask
+
+* OpenCV
+
+* NumPy
+
+* imutils
 
