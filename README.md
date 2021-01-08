@@ -2,10 +2,21 @@
 
 ### Web app portion of the translator
 
+## So far:
+- [x] Live webcam streaming to webpage
+- [x] Drag and Drop to webpage
+- [ ] Make option to use either camera or drag and drop
+- [ ] Find text from either image or camera
+- [ ] Translating
+
 ## Dependencies:
-#### Python 3
-#### Flask
-#### Opencv
-#### NumPy
-#### imutils
+* Python 3
+
+* Flask
+
+* OpenCV
+
+* NumPy
+
+* imutils
 
