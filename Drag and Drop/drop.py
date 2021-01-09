@@ -31,6 +31,7 @@ def index():
             file_urls.append(photos.url(filename))
             print(file.filename)
         session['file_urls'] = file_urls
+        print("\n" + "URL: " + str(file_urls) + "\n")
         return "uploading..."
     return render_template('index.html')
 
