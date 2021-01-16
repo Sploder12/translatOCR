@@ -1,6 +1,6 @@
 from pyimagesearch.motion_detection import singlemotiondetector
 from imutils.video import VideoStream
-from flask import Response, Flask, render_template, request
+from flask import Response, Flask, render_template, request, session, redirect, url_for
 import threading
 import argparse
 import datetime
@@ -13,18 +13,34 @@ lock = threading.Lock()
 app = Flask(__name__)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
+app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 
 ButtonPressed = 0
-count = 0
+count = 1
 @app.route("/", methods=["GET", "POST"])
 def index():
     global outputFrame, count
     if request.method == "POST":
-        if cv2.imwrite("frame%d.jpg" % count, outputFrame):
+        if "file_urls" not in session:
+            session['file_url'] = ""
+        file_url = session['file_url']
+        url = "static/frame%d.jpg" % count
+        if cv2.imwrite("LiveVideo/static/frame%d.jpg" % count, outputFrame):
             print("Frame Saved")
+        file_url = url
+        session['file_url'] = file_url
         count += 1
-        return render_template("index.html", ButtonPressed = ButtonPressed+1)
+        return redirect(url_for('capture'))
+        # return render_template("index.html", ButtonPressed = ButtonPressed+1)
     return render_template("index.html", ButtonPressed = ButtonPressed)
+
+@app.route("/capture")
+def capture():
+    if "file_url" not in session or session['file_url'] == "":
+        return redirect(url_for('index'))
+    file_url = session['file_url']
+    session.pop('file_url', None)
+    return render_template("capture.html", file_url=file_url)
 
 def detect_motion(frameCount):
     global vs, outputFrame, lock
@@ -69,11 +85,6 @@ def generateSingleFrame(imFrame):
 @app.route("/video_feed")
 def video_feed():
     return Response(generate(), mimetype = "multipart/x-mixed-replace; boundary=frame")
-
-@app.route("/capturedimage")
-def capturedimage():
-    # return Response(generateSingleFrame(), mimetype = "multipart/x-mixed-replace; boundary=frame")
-    return render_template("capture.html")
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()

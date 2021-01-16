@@ -11,7 +11,7 @@ app.config['DROPZONE_UPLOAD_MULTIPLE'] = True
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
 app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/DragAndDrop/uploads'
 app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 
 photos = UploadSet('photos', IMAGES)
