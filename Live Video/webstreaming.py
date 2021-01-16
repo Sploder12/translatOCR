@@ -1,6 +1,6 @@
 from pyimagesearch.motion_detection import singlemotiondetector
 from imutils.video import VideoStream
-from flask import Response, Flask, render_template
+from flask import Response, Flask, render_template, request
 import threading
 import argparse
 import datetime
@@ -14,9 +14,17 @@ app = Flask(__name__)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
-@app.route("/")
+ButtonPressed = 0
+count = 0
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    global outputFrame, count
+    if request.method == "POST":
+        if cv2.imwrite("frame%d.jpg" % count, outputFrame):
+            print("Frame Saved")
+        count += 1
+        return render_template("index.html", ButtonPressed = ButtonPressed+1)
+    return render_template("index.html", ButtonPressed = ButtonPressed)
 
 def detect_motion(frameCount):
     global vs, outputFrame, lock
@@ -47,9 +55,25 @@ def generate():
                 continue
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
+def generateSingleFrame(imFrame):
+    global lock
+    with lock:
+        if imFrame is None:
+            return
+        (flag, encodedImage) = cv2.imencode(".jpg", imFrame)
+        if not flag:
+            return
+    yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
+    return encodedImage
+
 @app.route("/video_feed")
 def video_feed():
     return Response(generate(), mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+@app.route("/capturedimage")
+def capturedimage():
+    # return Response(generateSingleFrame(), mimetype = "multipart/x-mixed-replace; boundary=frame")
+    return render_template("capture.html")
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
