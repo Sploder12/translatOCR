@@ -4,10 +4,24 @@
     <link href="{{ url_for('static', filename='style.css') }}" type="text/css" rel="stylesheet">
     <title>Captured Image</title>
     <link rel="icon" href="https://spatialflunky1.github.io/favicon.png">
+    <style>
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Captured Image</h1>
+    <div class="topnav">
+        <h1><em>Captured Image</em></h1>
+    </div>
     <a href="{{ url_for('index') }}">Back</a><p>
-    <img style="height: 400px" src="{{ file_url }}">
+        <img style="height: 400px" src="{{ file_url }}">
+        <div class="container">
+            <form method="post">
+                <input type="submit" value="Translate">
+            </form>
+        </div>
 </body>
 </html>

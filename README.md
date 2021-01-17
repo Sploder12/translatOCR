@@ -5,7 +5,7 @@
 ## So far:
 - [x] Live webcam streaming to webpage
 - [x] Drag and Drop to webpage
-- [ ] Make option to use either camera or drag and drop
+- [ ] Make option to use either camera or drag and drop (Homepage)
 - [ ] Find text from either image or camera
 - [ ] Translating
 

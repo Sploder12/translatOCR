@@ -6,9 +6,18 @@
     {{ dropzone.load() }}
     {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
     <link rel="icon" href="https://spatialflunky1.github.io/favicon.png">
+    <style>
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+            text-align: center;
+        }
+    </style>
 </head>
     <body>
-        <h1>Drag and Drop</h1>
+        <div class="topnav">
+            <h1><em>Drag and Drop</em></h1>
+        </div>
         {{ dropzone.create(action_view='index') }}
     </body>
 </html>

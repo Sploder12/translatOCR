@@ -1,12 +1,22 @@
+print("Loading", end="")
 from pyimagesearch.motion_detection import singlemotiondetector
+print(".", end="")
 from imutils.video import VideoStream
+print(".", end="")
 from flask import Response, Flask, render_template, request, session, redirect, url_for
+print(".", end="")
 import threading
+print(".", end="")
 import argparse
+print(".", end="")
 import datetime
+print(".", end="")
 import imutils
+print(".", end="")
 import time
+print(".", end="")
 import cv2
+print(".")
 
 outputFrame = None
 lock = threading.Lock()
@@ -34,13 +44,19 @@ def index():
         # return render_template("index.html", ButtonPressed = ButtonPressed+1)
     return render_template("index.html", ButtonPressed = ButtonPressed)
 
-@app.route("/capture")
+@app.route("/capture", methods=["GET", "POST"])
 def capture():
+    if request.method == "POST":
+        translate()
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('index'))
     file_url = session['file_url']
     session.pop('file_url', None)
     return render_template("capture.html", file_url=file_url)
+
+def translate():
+    print("The translate button has been pressed")
+    # Put something here for translating
 
 def detect_motion(frameCount):
     global vs, outputFrame, lock

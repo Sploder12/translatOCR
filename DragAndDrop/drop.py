@@ -1,8 +1,14 @@
+print("Loading", end="")
 from flask import Flask, render_template, request, redirect, session, url_for
+print(".", end="")
 from flask_dropzone import Dropzone
+print(".", end="")
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+print(".", end="")
 import argparse
+print(".", end="")
 import os
+print(".")
 
 app = Flask(__name__)
 dropzone = Dropzone(app)
