@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'CameraScreen.dart';
 
+
 // Starting point of the app.
 Future<void> main() async {
   // Ensure that plugin services are ready before app is run.
