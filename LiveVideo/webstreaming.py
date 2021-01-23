@@ -25,10 +25,20 @@ vs = VideoStream(src=0).start()
 time.sleep(2.0)
 app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 
-ButtonPressed = 0
 count = 1
+
 @app.route("/", methods=["GET", "POST"])
-def index():
+def home():
+    if request.method == "POST":
+        if request.form['button'] == 'Begin video feed':
+            #return redirect(url_for('streaming'))
+            print("Video button pressed")
+        if request.form['button'] == 'Upload Image':
+            print("Upload button pressed")
+    return render_template("home.html")
+
+@app.route("/streaming", methods=["GET", "POST"])
+def streaming():
     global outputFrame, count
     if request.method == "POST":
         if "file_urls" not in session:
@@ -41,15 +51,14 @@ def index():
         session['file_url'] = file_url
         count += 1
         return redirect(url_for('capture'))
-        # return render_template("index.html", ButtonPressed = ButtonPressed+1)
-    return render_template("index.html", ButtonPressed = ButtonPressed)
+    return render_template("streaming.html")
 
 @app.route("/capture", methods=["GET", "POST"])
 def capture():
     if request.method == "POST":
         translate()
     if "file_url" not in session or session['file_url'] == "":
-        return redirect(url_for('index'))
+        return redirect(url_for('streaming'))
     file_url = session['file_url']
     session.pop('file_url', None)
     return render_template("capture.html", file_url=file_url)

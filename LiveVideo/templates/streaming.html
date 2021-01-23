@@ -12,17 +12,18 @@
     <title>Video Test</title>
     <link rel="icon" href="https://spatialflunky1.github.io/favicon.png">
 </head>
-  <body>
-      <div class="topnav">
-          <h1><em>Video Test</em></h1>
-      </div>
-      <div>
-          <img src="{{ url_for('video_feed') }}">
-      </div>
-      <div class="container">
-          <form method="post">
-              <input type="submit" value="Capture Photo">
-          </form>
-      </div>
-  </body>
+<body>
+    <div class="topnav">
+        <h1><em>Video Test</em></h1>
+    </div>
+    <a href="{{ url_for('home') }}">Back</a><p>
+        <div>
+            <img src="{{ url_for('video_feed') }}">
+        </div>
+        <div class="container">
+            <form method="post">
+                <input type="submit" value="Capture Photo">
+            </form>
+        </div>
+</body>
 </html>
