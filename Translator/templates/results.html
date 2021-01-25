@@ -16,11 +16,9 @@
     <div class="topnav">
         <h1><em>Results</em></h1>
     </div>
-    <a href="{{ url_for('index') }}">Back</a><p>
-    <ul>
-        {% for file_url in file_urls %}
-        <img style="height: 150px" src="{{ file_url }}">
-        {% endfor %}
-    </ul>
+    <a href="{{ url_for('drop') }}">Back</a><p>
+    {% for file_url in file_urls %}
+    <img style="height: 150px" src="{{ file_url }}">
+    {% endfor %}
 </body>
 </html>

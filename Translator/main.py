@@ -5,6 +5,10 @@ from imutils.video import VideoStream
 print(".", end="")
 from flask import Response, Flask, render_template, request, session, redirect, url_for
 print(".", end="")
+from flask_dropzone import Dropzone
+print(".", end="")
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+print(".", end="")
 import threading
 print(".", end="")
 import argparse
@@ -16,14 +20,27 @@ print(".", end="")
 import time
 print(".", end="")
 import cv2
+print(".", end="")
+import os
 print(".")
 
 outputFrame = None
 lock = threading.Lock()
 app = Flask(__name__)
+dropzone = Dropzone(app)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
+
+app.config['DROPZONE_UPLOAD_MULTIPLE'] = True
+app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
+app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
+app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/Translator/uploads'
 app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
+
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
+patch_request_class(app) 
 
 count = 1
 
@@ -31,10 +48,9 @@ count = 1
 def home():
     if request.method == "POST":
         if request.form['button'] == 'Begin video feed':
-            #return redirect(url_for('streaming'))
-            print("Video button pressed")
+            return redirect(url_for('streaming'))
         if request.form['button'] == 'Upload Image':
-            print("Upload button pressed")
+            return redirect(url_for('drop'))
     return render_template("home.html")
 
 @app.route("/streaming", methods=["GET", "POST"])
@@ -45,7 +61,7 @@ def streaming():
             session['file_url'] = ""
         file_url = session['file_url']
         url = "static/frame%d.jpg" % count
-        if cv2.imwrite("LiveVideo/static/frame%d.jpg" % count, outputFrame):
+        if cv2.imwrite("Translator/static/frame%d.jpg" % count, outputFrame):
             print("Frame Saved")
         file_url = url
         session['file_url'] = file_url
@@ -56,16 +72,38 @@ def streaming():
 @app.route("/capture", methods=["GET", "POST"])
 def capture():
     if request.method == "POST":
-        translate()
+        #Translate stuff goes here
+        return -1
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('streaming'))
     file_url = session['file_url']
     session.pop('file_url', None)
     return render_template("capture.html", file_url=file_url)
 
-def translate():
-    print("The translate button has been pressed")
-    # Put something here for translating
+@app.route('/drop', methods=['GET', 'POST'])
+def drop():
+    if "file_urls" not in session:
+        session['file_urls'] = []
+    file_urls = session['file_urls']
+    if request.method == 'POST':
+        file_obj = request.files
+        for f in file_obj:
+            file = request.files.get(f)
+            filename = photos.save(file, name=file.filename)
+            file_urls.append(photos.url(filename))
+            print(file.filename)
+        session['file_urls'] = file_urls
+        print("\n" + "URL: " + str(file_urls) + "\n")
+        return "uploading..."
+    return render_template('drop.html')
+
+@app.route('/results')
+def results():
+    if "file_urls" not in session or session['file_urls'] == []:
+        return redirect(url_for('drop'))
+    file_urls = session['file_urls']
+    session.pop('file_urls', None)
+    return render_template('results.html', file_urls=file_urls)
 
 def detect_motion(frameCount):
     global vs, outputFrame, lock

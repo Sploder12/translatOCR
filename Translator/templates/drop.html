@@ -14,10 +14,11 @@
         }
     </style>
 </head>
-    <body>
-        <div class="topnav">
-            <h1><em>Drag and Drop</em></h1>
-        </div>
-        {{ dropzone.create(action_view='index') }}
-    </body>
+<body>
+    <div class="topnav">
+        <h1><em>Drag and Drop</em></h1>
+    </div>
+    <a href="{{ url_for('home') }}">Back</a><p>
+        {{ dropzone.create(action_view='drop') }}
+</body>
 </html>
