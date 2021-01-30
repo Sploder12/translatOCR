@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'DisplayPictureScreen.dart';
+import 'package:image_picker/image_picker.dart';
 
 // Helper functions!
 // `=>` is a shorthand for one-liner function.
@@ -160,6 +161,24 @@ class CameraScreenState extends State<CameraScreen> {
                     // Attempt to take a picture and log where it's been saved.
                     await _controller.takePicture(imagePath);
                     _imageTaken = imagePath;
+                    redraw();
+                  } catch (e) {
+                    // If an error occurs, log the error to the console.
+                    print(e);
+                  }
+                },
+              ),
+              FloatingActionButton(
+                heroTag: 3,
+                child: Icon(
+                    Icons.photo),
+                onPressed: () async {
+                  try {
+                    final imageFile = await ImagePicker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    _imageTaken = imageFile.path;
+
                     redraw();
                   } catch (e) {
                     // If an error occurs, log the error to the console.
