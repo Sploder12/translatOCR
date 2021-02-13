@@ -1,2 +1,0 @@
-pytest==6.2.1
-google-cloud-logging==1.15.1
