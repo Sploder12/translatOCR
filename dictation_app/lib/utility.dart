@@ -1,6 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 extension UsefulMethods on String {
   String capitalize() {
     return this[0].toUpperCase() + this.substring(1);

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutterapp/RecognizedTextPainter.dart';
+import 'package:flutterapp/LanguageSelect.dart';
 import 'BoundingBoxPainter.dart';
 
 // A widget that displays the picture taken by the user.
@@ -72,6 +74,17 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
                   positions.add(Offset(box.left, box.top));
 
                 }
+                Navigator.push(
+                    context,
+                    Platform.isAndroid
+                        ? MaterialPageRoute(
+                        builder: (context) => DisplayLanguageScreen(
+                          texts: texts
+                        ))
+                        : CupertinoPageRoute(
+                        builder: (context) => DisplayLanguageScreen(
+                            texts: texts
+                        )));
                 redraw();
               },
             ),

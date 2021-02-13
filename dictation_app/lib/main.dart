@@ -95,7 +95,7 @@ class DictationPageState extends State<DictationPage> {
             words.length > 1) {
           capitalizedWordsIndex.add(recognized.length - 2);
           for (int i in capitalizedWordsIndex) {
-            String word = recognized[i];
+            //String word = recognized[i];
             recognized[i] = recognized[i].capitalize();
           }
           recognized.removeWhere(
