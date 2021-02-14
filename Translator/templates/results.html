@@ -16,7 +16,11 @@
     <div class="topnav">
         <h1><em>Results</em></h1>
     </div>
-    <a href="{{ url_for('drop') }}">Back</a><p>
+    <div class="container">
+        <form method="post">
+            <input type="submit" name="button" value="Back">
+        </form>
+    </div>
     {% for file_url in file_urls %}
     <img style="height: 150px" src="{{ file_url }}">
     {% endfor %}

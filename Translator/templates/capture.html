@@ -16,12 +16,16 @@
     <div class="topnav">
         <h1><em>Captured Image</em></h1>
     </div>
-    <a href="{{ url_for('streaming') }}">Back</a><p>
-        <img style="height: 400px" src="{{ file_url }}">
-        <div class="container">
-            <form method="post">
-                <input type="submit" value="Translate">
-            </form>
-        </div>
+    <div class="container">
+        <form method="post">
+            <input type="submit" name="button" value="Back">
+        </form>
+    </div>
+    <img style="height: 400px" src="{{ file_url }}">
+    <div class="container">
+        <form method="post">
+            <input type="submit" value="Translate">
+        </form>
+    </div>
 </body>
 </html>

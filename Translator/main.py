@@ -31,11 +31,11 @@ dropzone = Dropzone(app)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
-app.config['DROPZONE_UPLOAD_MULTIPLE'] = True
+app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
 app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/Translator/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + 'Translator/uploads'
 app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 
 photos = UploadSet('photos', IMAGES)
@@ -57,7 +57,7 @@ def home():
 def streaming():
     global outputFrame, count
     if request.method == "POST":
-        if "file_urls" not in session:
+        if "file_url" not in session:
             session['file_url'] = ""
         file_url = session['file_url']
         url = "static/frame%d.jpg" % count
@@ -73,7 +73,9 @@ def streaming():
 def capture():
     if request.method == "POST":
         #Translate stuff goes here
-        return -1
+        if request.form['button'] == 'Back':
+            session['file_url'] = ""
+            return redirect(url_for('streaming'))
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('streaming'))
     file_url = session['file_url']
@@ -101,6 +103,10 @@ def drop():
 def results():
     if "file_urls" not in session or session['file_urls'] == []:
         return redirect(url_for('drop'))
+    if request.method == "POST":
+        if request.form['button'] == 'Back':
+            session['file_urls'] = []
+            return redirect(url_for('drop'))
     file_urls = session['file_urls']
     session.pop('file_urls', None)
     return render_template('results.html', file_urls=file_urls)
@@ -133,17 +139,6 @@ def generate():
             if not flag:
                 continue
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
-
-def generateSingleFrame(imFrame):
-    global lock
-    with lock:
-        if imFrame is None:
-            return
-        (flag, encodedImage) = cv2.imencode(".jpg", imFrame)
-        if not flag:
-            return
-    yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
-    return encodedImage
 
 @app.route("/video_feed")
 def video_feed():
