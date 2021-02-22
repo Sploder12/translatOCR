@@ -35,7 +35,7 @@ app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
 app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + 'Translator/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/uploads'
 app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 
 photos = UploadSet('photos', IMAGES)
@@ -57,10 +57,15 @@ def home():
 def streaming():
     global outputFrame, count
     if request.method == "POST":
+        if request.form['button'] == 'Back':
+            return redirect(url_for('home'))
         if "file_url" not in session:
             session['file_url'] = ""
         file_url = session['file_url']
         url = "static/frame%d.jpg" % count
+        height, width, channels = outputFrame.shape
+        print(width)
+        print(height)
         if cv2.imwrite("Translator/static/frame%d.jpg" % count, outputFrame):
             print("Frame Saved")
         file_url = url
@@ -72,10 +77,11 @@ def streaming():
 @app.route("/capture", methods=["GET", "POST"])
 def capture():
     if request.method == "POST":
-        #Translate stuff goes here
         if request.form['button'] == 'Back':
             session['file_url'] = ""
             return redirect(url_for('streaming'))
+        #Translate stuff goes here
+        return redirect(url_for('translated'))
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('streaming'))
     file_url = session['file_url']
@@ -88,6 +94,8 @@ def drop():
         session['file_urls'] = []
     file_urls = session['file_urls']
     if request.method == 'POST':
+        if request.form['button'] == 'Back':
+            return redirect(url_for('home'))
         file_obj = request.files
         for f in file_obj:
             file = request.files.get(f)
@@ -99,7 +107,7 @@ def drop():
         return "uploading..."
     return render_template('drop.html')
 
-@app.route('/results')
+@app.route('/results', methods=['GET', 'POST'])
 def results():
     if "file_urls" not in session or session['file_urls'] == []:
         return redirect(url_for('drop'))
@@ -110,6 +118,13 @@ def results():
     file_urls = session['file_urls']
     session.pop('file_urls', None)
     return render_template('results.html', file_urls=file_urls)
+
+@app.route('/translated', methods=['GET', 'POST'])
+def translated():
+    if request.method == 'POST':
+        if request.form['button'] == 'Back':
+            return redirect(url_for('streaming'))
+    return render_template('translated.html')
 
 def detect_motion(frameCount):
     global vs, outputFrame, lock
