@@ -1,28 +1,44 @@
-print("Loading", end="")
-from pyimagesearch.motion_detection import singlemotiondetector
-print(".", end="")
-from imutils.video import VideoStream
-print(".", end="")
-from flask import Response, Flask, render_template, request, session, redirect, url_for
-print(".", end="")
-from flask_dropzone import Dropzone
-print(".", end="")
-from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-print(".", end="")
-import threading
-print(".", end="")
-import argparse
-print(".", end="")
-import datetime
-print(".", end="")
-import imutils
-print(".", end="")
-import time
-print(".", end="")
-import cv2
-print(".", end="")
+import sys
+def progress(count, total, status=''):
+    bar_len = 12
+    filled_len = int(round(bar_len * count / float(total)))
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    sys.stdout.flush()
+
+progress(0, 12, status='Loading Translator')
 import os
-print(".")
+progress(1, 12, status='Loading Translator')
+from pyimagesearch.motion_detection import singlemotiondetector
+progress(2, 12, status='Loading Translator')
+from imutils.video import VideoStream
+progress(3, 12, status='Loading Translator')
+from flask import Response, Flask, render_template, request, session, redirect, url_for
+progress(4, 12, status='Loading Translator')
+from flask_dropzone import Dropzone
+progress(5, 12, status='Loading Translator')
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+progress(6, 12, status='Loading Translator')
+import threading
+progress(7, 12, status='Loading Translator')
+import argparse
+progress(8, 12, status='Loading Translator')
+import datetime
+progress(9, 12, status='Loading Translator')
+import imutils
+progress(10, 12, status='Loading Translator')
+import time
+progress(11, 12, status='Loading Translator')
+import cv2
+progress(12, 12, status='Loading Translator')
+print("██╗░░░░░░█████╗░░█████╗░██████╗░██╗███╗░░██╗░██████╗░")
+print("██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║████╗░██║██╔════╝░")
+print("██║░░░░░██║░░██║███████║██║░░██║██║██╔██╗██║██║░░██╗░")
+print("██║░░░░░██║░░██║██╔══██║██║░░██║██║██║╚████║██║░░╚██╗")
+print("███████╗╚█████╔╝██║░░██║██████╔╝██║██║░╚███║╚██████╔╝")
+print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░")
+
 
 outputFrame = None
 lock = threading.Lock()
