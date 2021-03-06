@@ -1,0 +1,11 @@
+certifi==2020.12.5
+mkl-fft==1.3.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+numpy @ file:///C:/ci/numpy_and_numpy_base_1603468620949/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+Pillow @ file:///C:/ci/pillow_1614711461059/work
+scipy @ file:///C:/ci/scipy_1614023124510/work
+six @ file:///C:/ci/six_1605205426665/work
+tesserocr @ file:///D:/bld/tesserocr_1610555349210/work
+wincertstore==0.2
