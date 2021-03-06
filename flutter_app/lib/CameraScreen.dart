@@ -4,8 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'DisplayPictureScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -116,20 +114,15 @@ class CameraScreenState extends State<CameraScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               FloatingActionButton(
+                child: Icon(Platform.isAndroid
+                    ? Icons.camera
+                    : CupertinoIcons.circle_filled),
                 heroTag: 1,
-                child: ConstrainedBox(
-                    constraints: BoxConstraints.expand(),
-                    child: _imageTaken.isEmpty
-                        ? Icon(Platform.isAndroid
-                        ? Icons.photo
-                        : CupertinoIcons.photo_camera_solid)
-                        : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.file(File(_imageTaken),
-                          fit: BoxFit.cover),
-                    )),
-                onPressed: () {
-                  if (_imageTaken.isNotEmpty) {
+                onPressed: () async {
+                  try {
+
+                    // Attempt to take a picture and log where it's been saved.
+                    _imageTaken = (await _controller.takePicture()).path;
                     _getImageSize(_imageTaken);
                     Navigator.push(
                         context,
@@ -144,23 +137,6 @@ class CameraScreenState extends State<CameraScreen> {
                               imagePath: _imageTaken,
                               imageSize: _imageSize,
                             )));
-                  }
-                },
-              ),
-              FloatingActionButton(
-                child: Icon(Platform.isAndroid
-                    ? Icons.camera
-                    : CupertinoIcons.circle_filled),
-                heroTag: 2,
-                onPressed: () async {
-                  try {
-                    // Generate a unique temporary path for image.
-                    final imagePath = join((await getTemporaryDirectory()).path,
-                        UniqueKey().toString() + '.png');
-
-                    // Attempt to take a picture and log where it's been saved.
-                    await _controller.takePicture(imagePath);
-                    _imageTaken = imagePath;
                     redraw();
                   } catch (e) {
                     // If an error occurs, log the error to the console.
@@ -169,7 +145,7 @@ class CameraScreenState extends State<CameraScreen> {
                 },
               ),
               FloatingActionButton(
-                heroTag: 3,
+                heroTag: 2,
                 child: Icon(
                     Icons.photo),
                 onPressed: () async {
@@ -178,7 +154,20 @@ class CameraScreenState extends State<CameraScreen> {
                       source: ImageSource.gallery,
                     );
                     _imageTaken = imageFile.path;
-
+                    _getImageSize(_imageTaken);
+                    Navigator.push(
+                        context,
+                        Platform.isAndroid
+                            ? MaterialPageRoute(
+                            builder: (context) => DisplayPictureScreen(
+                              imagePath: _imageTaken,
+                              imageSize: _imageSize,
+                            ))
+                            : CupertinoPageRoute(
+                            builder: (context) => DisplayPictureScreen(
+                              imagePath: _imageTaken,
+                              imageSize: _imageSize,
+                            )));
                     redraw();
                   } catch (e) {
                     // If an error occurs, log the error to the console.

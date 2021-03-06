@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:flutterapp/RecognizedTextPainter.dart';
 import 'package:flutterapp/LanguageSelect.dart';
-import 'BoundingBoxPainter.dart';
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatefulWidget {
@@ -24,7 +22,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
   double scaleX = 1.0;
   double scaleY = 1.0;
 
-  List<String> texts = [];
+  String texts = "";
   List<Offset> positions = [];
 
   void redraw() => setState(() {});
@@ -34,14 +32,17 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     return Scaffold(
         body: Stack(
           children: <Widget>[
+            Container(
+              height: 690.0,
+              width: 415.0,
+              color: Colors.black87,
+            ),
             Image.file(
               File(widget.imagePath),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
-            CustomPaint(painter: BoundingBoxPainter(boxes)),
-            CustomPaint(painter: RecognizedTextPainter(texts, positions)),
+              height: MediaQuery.of(context).size.height - 85,
+            )
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -64,13 +65,13 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
                     widget.imageSize.height;
 
                 boxes = [];
-                texts = [];
+                texts = "";
                 positions = [];
                 for (TextBlock block in result.blocks) {
                   var box = Rect.fromLTRB(block.boundingBox.left * scaleX, block.boundingBox.top * scaleY,
                       block.boundingBox.right * scaleX, block.boundingBox.bottom * scaleY);
                   boxes.add(box);
-                  texts.add(block.text);
+                  texts += block.text;
                   positions.add(Offset(box.left, box.top));
 
                 }
@@ -96,9 +97,9 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 imageCache.clear();
                 File(widget.imagePath).delete();
                 Navigator.pop(context);
-              },
+              }
             )
-          ],
+          ]
         ));
   }
 }
