@@ -32,13 +32,14 @@ import time
 progress(11, 12, status='Loading Translator')
 import cv2
 progress(12, 12, status='Loading Translator')
+from PIL import Image
+from tesserocr import PyTessBaseAPI
 print("██╗░░░░░░█████╗░░█████╗░██████╗░██╗███╗░░██╗░██████╗░")
 print("██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║████╗░██║██╔════╝░")
 print("██║░░░░░██║░░██║███████║██║░░██║██║██╔██╗██║██║░░██╗░")
 print("██║░░░░░██║░░██║██╔══██║██║░░██║██║██║╚████║██║░░╚██╗")
 print("███████╗╚█████╔╝██║░░██║██████╔╝██║██║░╚███║╚██████╔╝")
 print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░")
-
 
 outputFrame = None
 lock = threading.Lock()
@@ -57,7 +58,6 @@ app.config['SECRET_KEY'] = 'supersecretkeygoeshere'
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app) 
-
 count = 1
 
 @app.route("/", methods=["GET", "POST"])
@@ -71,7 +71,7 @@ def home():
 
 @app.route("/streaming", methods=["GET", "POST"])
 def streaming():
-    global outputFrame, count
+    global outputFrame, count, url
     if request.method == "POST":
         if request.form['button'] == 'Back':
             return redirect(url_for('home'))
@@ -82,7 +82,7 @@ def streaming():
         height, width, channels = outputFrame.shape
         print(width)
         print(height)
-        if cv2.imwrite("Translator/static/frame%d.jpg" % count, outputFrame):
+        if cv2.imwrite("static/frame%d.jpg" % count, outputFrame):
             print("Frame Saved")
         file_url = url
         session['file_url'] = file_url
@@ -92,11 +92,14 @@ def streaming():
 
 @app.route("/capture", methods=["GET", "POST"])
 def capture():
+    global url
     if request.method == "POST":
         if request.form['button'] == 'Back':
             session['file_url'] = ""
             return redirect(url_for('streaming'))
-        #Translate stuff goes here
+        with PyTessBaseAPI(path='F:\\Desktop\\Techy Things\\Python\\tessdata') as api:
+            api.SetImageFile(url)
+            print(api.GetUTF8Text())
         return redirect(url_for('translated'))
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('streaming'))
