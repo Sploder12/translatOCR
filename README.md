@@ -21,6 +21,12 @@
 
 * imutils
 
+You can install all of the dependencies using:
+```
+pip install -r requirements.txt
+```
+(`requirements.txt` is located in the root of the repository)
+
 ## Fix for flask_uploads werkzeug error:
 There is an issue in the flask_uploads package due to werkzeug updating but not flask_uploads and to fix it you need to change one line in `flask_uploads.py`
 which should be loacted in:
