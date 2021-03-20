@@ -97,7 +97,7 @@ def capture():
         if request.form['button'] == 'Back':
             session['file_url'] = ""
             return redirect(url_for('streaming'))
-        with PyTessBaseAPI(path='F:\\Desktop\\Techy Things\\Python\\tessdata') as api:
+        with PyTessBaseAPI(path='tessdata') as api:
             api.SetImageFile(url)
             print(api.GetUTF8Text())
         return redirect(url_for('translated'))
@@ -155,9 +155,9 @@ def detect_motion(frameCount):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (7, 7), 0)
         timestamp = datetime.datetime.now()
-        cv2.putText(frame, timestamp.strftime(
-            "%A %d %B %Y %I:%M:%S%p"), (10 ,frame.shape[0] - 10),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+#        cv2.putText(frame, timestamp.strftime(
+#            "%A %d %B %Y %I:%M:%S%p"), (10 ,frame.shape[0] - 10),
+#            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
         md.update(gray)
         total += 1
         with lock:
