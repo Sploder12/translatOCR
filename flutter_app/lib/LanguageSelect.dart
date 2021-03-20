@@ -14,8 +14,56 @@ class DisplayLanguageScreen extends StatefulWidget {
   State<StatefulWidget> createState() => DisplayLanguageScreenState();
 }
 
-final List<String> languages = ["English", "Korean", "Spanish"];
-final Map<String,String> langCodes = {"English":"en", "Korean":"ko", "Spanish":"es"};
+final List<String> languages = [
+  "Albanian", "Arabic", "Armenian",
+  "Bengali", "Bosnian", "Bulgarian",
+  "Croatian", "Czech",
+  "Danish", "Dutch",
+  "English", "Estonian",
+  "Finnish", "French",
+  "German", "Greek",
+  "Hindi", "Hungarian",
+  "Indonesian", "Irish", "Icelandic", "Italian",
+  "Japanese",
+  "Kazakh", "Korean", "Kurdish",
+  "Latin", "Lithuanian", "Latvian",
+  "Macedonian", "Malay", "Marathi",
+  "Nepali", "Norwegian",
+  "Persian", "Polish", "Portuguese",
+  "Romanian", "Russian",
+  "Sindhi", "Serbian", "Sinhala", "Slovenian",
+  "Somali", "Spanish", "Sundanese", "Swahili", "Swedish",
+  "Thai", "Turkish",
+  "Ukrainian", "Urdu", "Uzbek",
+  "Vietnamese",
+  "Welsh",
+  "Yiddish"
+];
+final Map<String,String> langCodes = {
+  "Albanian":"sq", "Arabic":"ar", "Armenian":"hy",
+  "Bengali":"bn", "Bosnian":"bs", "Bulgarian":"bg",
+  "Croatian":"hr", "Czech":"cs",
+  "Danish":"da", "Dutch":"nl",
+  "English":"en", "Estonian":"et",
+  "Finnish":"fi", "French":"fr",
+  "German":"de", "Greek":"el",
+  "Hindi":"hi", "Hungarian":"hu",
+  "Indonesian":"id", "Irish":"ga", "Icelandic":"is", "Italian":"it",
+  "Japanese":"ja",
+  "Kazakh":"kk", "Korean":"ko", "Kurdish":"ku",
+  "Latin":"la", "Lithuanian":"lt", "Latvian":"lv",
+  "Macedonian":"mk", "Malay":"ms", "Marathi":"mr",
+  "Nepali":"ne", "Norwegian":"no",
+  "Persian":"fa", "Polish":"pl", "Portuguese":"pt",
+  "Romanian":"ro", "Russian":"ru",
+  "Sindhi":"sd", "Serbian":"sr", "Sinhala":"si", "Slovenian":"sl",
+  "Somali":"so", "Spanish":"es", "Sundanese":"su", "Swahili":"sw", "Swedish":"sv",
+  "Thai":"th", "Turkish":"tr",
+  "Ukrainian":"uk", "Urdu":"ur", "Uzbek":"uz",
+  "Vietnamese":"vi",
+  "Welsh":"cy",
+  "Yiddish":"yi"
+};
 
 class DisplayLanguageScreenState extends State<DisplayLanguageScreen> {
   String inValue = "English";
@@ -46,7 +94,7 @@ class DisplayLanguageScreenState extends State<DisplayLanguageScreen> {
             ),
             Positioned(
                 left: 0.0,
-                top: 55.0,
+                top: 30.0,
                 width: 415.0,
                 child: Text(
                   "Input:",

@@ -32,6 +32,9 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
+GeneratedPluginRegistrant.java
+GeneratedPluginRegistrant.m
+GeneratedPluginRegistrant.h
 
 # Symbolication related
 app.*.symbols
@@ -41,3 +44,7 @@ app.*.map.json
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+#manual additions.
+package_config.json
+pubspec.lock
