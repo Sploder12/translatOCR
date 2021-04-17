@@ -6,34 +6,35 @@ def progress(count, total, status=''):
     bar = '=' * filled_len + '-' * (bar_len - filled_len)
     sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
     sys.stdout.flush()
-
-progress(0, 12, status='Loading Translator')
+progress(0, 14, status='Loading Translator')
 import os
-progress(1, 12, status='Loading Translator')
+progress(1, 14, status='Loading Translator')
 from pyimagesearch.motion_detection import singlemotiondetector
-progress(2, 12, status='Loading Translator')
+progress(2, 14, status='Loading Translator')
 from imutils.video import VideoStream
-progress(3, 12, status='Loading Translator')
+progress(3, 14, status='Loading Translator')
 from flask import Response, Flask, render_template, request, session, redirect, url_for
-progress(4, 12, status='Loading Translator')
+progress(4, 14, status='Loading Translator')
 from flask_dropzone import Dropzone
-progress(5, 12, status='Loading Translator')
+progress(5, 14, status='Loading Translator')
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-progress(6, 12, status='Loading Translator')
+progress(6, 14, status='Loading Translator')
 import threading
-progress(7, 12, status='Loading Translator')
+progress(7, 14, status='Loading Translator')
 import argparse
-progress(8, 12, status='Loading Translator')
+progress(8, 14, status='Loading Translator')
 import datetime
-progress(9, 12, status='Loading Translator')
+progress(9, 14, status='Loading Translator')
 import imutils
-progress(10, 12, status='Loading Translator')
+progress(10, 14, status='Loading Translator')
 import time
-progress(11, 12, status='Loading Translator')
+progress(11, 14, status='Loading Translator')
 import cv2
-progress(12, 12, status='Loading Translator')
+progress(12, 14, status='Loading Translator')
 from PIL import Image
+progress(13, 14, status='Loading Translator')
 from tesserocr import PyTessBaseAPI
+progress(14, 14, status='Loading Translator')
 print("██╗░░░░░░█████╗░░█████╗░██████╗░██╗███╗░░██╗░██████╗░")
 print("██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║████╗░██║██╔════╝░")
 print("██║░░░░░██║░░██║███████║██║░░██║██║██╔██╗██║██║░░██╗░")
@@ -41,12 +42,16 @@ print("██║░░░░░██║░░██║██╔══██║�
 print("███████╗╚█████╔╝██║░░██║██████╔╝██║██║░╚███║╚██████╔╝")
 print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░")
 
+cwd = os.getcwd()
+print("Current Directory: " + cwd)
+
 outputFrame = None
 lock = threading.Lock()
 app = Flask(__name__)
 dropzone = Dropzone(app)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
+sr = cv2.dnn_superres.DnnSuperResImpl_create()
 
 app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
@@ -78,11 +83,15 @@ def streaming():
         if "file_url" not in session:
             session['file_url'] = ""
         file_url = session['file_url']
-        url = "static/frame%d.jpg" % count
+        url = "/static/frame%d.jpg" % count
         height, width, channels = outputFrame.shape
         print(width)
         print(height)
-        if cv2.imwrite("static/frame%d.jpg" % count, outputFrame):
+        path = "FSRCNN_x4.pb"
+        sr.readModel(path)
+        sr.setModel("fsrcnn", 4)
+        result = sr.upsample(outputFrame)
+        if cv2.imwrite(cwd + "/static/frame%d.jpg" % count, result):
             print("Frame Saved")
         file_url = url
         session['file_url'] = file_url
@@ -98,7 +107,7 @@ def capture():
             session['file_url'] = ""
             return redirect(url_for('streaming'))
         with PyTessBaseAPI(path='tessdata') as api:
-            api.SetImageFile(url)
+            api.SetImageFile(cwd + url)
             print(api.GetUTF8Text())
         return redirect(url_for('translated'))
     if "file_url" not in session or session['file_url'] == "":
@@ -151,7 +160,7 @@ def detect_motion(frameCount):
     total = 0
     while True:
         frame = vs.read()
-        frame = imutils.resize(frame, width=400)
+        frame = imutils.resize(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (7, 7), 0)
         timestamp = datetime.datetime.now()
