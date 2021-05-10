@@ -7,8 +7,9 @@
 - [x] Button to grab frame from webcam
 - [x] Drag and Drop to webpage
 - [X] Make option to use either camera or drag and drop (Homepage)
-- [ ] Find text from either image or camera
-- [ ] Translating
+- [X] Find text from either image or camera (buggy)
+- [X] Translating (needs to fix the language selector)
+- [ ] Make better looking UI
 
 ## Dependencies:
 * Python 3
