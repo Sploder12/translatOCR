@@ -32,7 +32,7 @@ pip install -r requirements.txt
 There is an issue in the flask_uploads package due to werkzeug updating but not flask_uploads and to fix it you need to change one line in `flask_uploads.py`
 which should be loacted in:
 
-`C:\Users\<USERNAME>\AppData\Local\Programs\Python\Python39\Lib\site-packages` or on linux,
+`C:\Users\<USERNAME>\AppData\Local\Programs\Python\Python39\Lib\site-packages` or on linux,                                          
 `~/.local/lib/python3.9/site-packages` unless manually changed
 
 
