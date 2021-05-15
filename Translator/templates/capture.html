@@ -22,10 +22,19 @@
         </form>
     </div>
     <img style="height: 400px" src="{{ file_url }}">
-    <div class="container">
-        <form method="post">
-            <input type="submit" class="button button2" name="button" value="Translate">
-        </form>
+    <div class="dropdown">
+        <button class="dropbtn">Language to translate into</button>
+        <div class="dropdown-content">
+            <form method="post">
+                <input type="submit" class="button button2" name="button" value="English">
+            </form>
+            <form method="post">
+                <input type="submit" class="button button2" name="button" value="Spanish">
+            </form>
+            <form method="post">
+                <input type="submit" class="button button2" name="button" value="French">
+            </form>
+        </div>
     </div>
 </body>
 </html>

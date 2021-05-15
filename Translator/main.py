@@ -8,42 +8,46 @@ def progress(count, total, status=''):
     sys.stdout.flush()
 progress(0, 14, status='Loading Translator')
 import os
-progress(1, 14, status='Loading Translator')
+progress(1, 15, status='Loading Translator')
 from pyimagesearch.motion_detection import singlemotiondetector
-progress(2, 14, status='Loading Translator')
+progress(2, 15, status='Loading Translator')
 from imutils.video import VideoStream
-progress(3, 14, status='Loading Translator')
+progress(3, 15, status='Loading Translator')
 from flask import Response, Flask, render_template, request, session, redirect, url_for
-progress(4, 14, status='Loading Translator')
+progress(4, 15, status='Loading Translator')
 from flask_dropzone import Dropzone
-progress(5, 14, status='Loading Translator')
+progress(5, 15, status='Loading Translator')
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-progress(6, 14, status='Loading Translator')
+progress(6, 15, status='Loading Translator')
 import threading
-progress(7, 14, status='Loading Translator')
+progress(7, 15, status='Loading Translator')
 import argparse
-progress(8, 14, status='Loading Translator')
+progress(8, 15, status='Loading Translator')
 import datetime
-progress(9, 14, status='Loading Translator')
+progress(9, 15, status='Loading Translator')
 import imutils
-progress(10, 14, status='Loading Translator')
+progress(10, 15, status='Loading Translator')
 import time
-progress(11, 14, status='Loading Translator')
+progress(11, 15, status='Loading Translator')
 import cv2
-progress(12, 14, status='Loading Translator')
+progress(12, 15, status='Loading Translator')
 from PIL import Image
-progress(13, 14, status='Loading Translator')
+progress(13, 15, status='Loading Translator')
 from tesserocr import PyTessBaseAPI
-progress(14, 14, status='Loading Translator')
+progress(14, 15, status='Loading Translator')
+from googletrans import Translator, constants
+progress(15, 15, status='Loading Translator')
 print("██╗░░░░░░█████╗░░█████╗░██████╗░██╗███╗░░██╗░██████╗░")
 print("██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║████╗░██║██╔════╝░")
 print("██║░░░░░██║░░██║███████║██║░░██║██║██╔██╗██║██║░░██╗░")
 print("██║░░░░░██║░░██║██╔══██║██║░░██║██║██║╚████║██║░░╚██╗")
 print("███████╗╚█████╔╝██║░░██║██████╔╝██║██║░╚███║╚██████╔╝")
-print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░")
+print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░", end="\n\n")
 
 cwd = os.getcwd()
-print("Current Directory: " + cwd)
+print("Current Directory: " + cwd, end="\n\n")
+print("Make sure the directory ends in: 'dunno-will-change-it-later\Translator'")
+print("or it may not work", end="\n\n")
 
 outputFrame = None
 lock = threading.Lock()
@@ -52,6 +56,7 @@ dropzone = Dropzone(app)
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
 sr = cv2.dnn_superres.DnnSuperResImpl_create()
+translator = Translator()
 
 app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
@@ -109,6 +114,27 @@ def capture():
         with PyTessBaseAPI(path='tessdata') as api:
             api.SetImageFile(cwd + url)
             print(api.GetUTF8Text())
+            if request.form['button'] == 'English':
+                try:
+                    translation = translator.translate(api.GetUTF8Text(), dest='en')
+                    print(f"{translation.origin} ({translation.src}) --> {translation.text} ({translation.dest})")
+                except:
+                    print("No text found")
+                    return redirect(url_for('translated'))
+            if request.form['button'] == 'Spanish':
+                try:
+                    translation = translator.translate(api.GetUTF8Text(), dest='es')
+                    print(f"{translation.origin} ({translation.src}) --> {translation.text} ({translation.dest})")
+                except:
+                    print("No text found")
+                    return redirect(url_for('translated'))
+            if request.form['button'] == '':
+                try:
+                    translation = translator.translate(api.GetUTF8Text(), dest='fr')
+                    print(f"{translation.origin} ({translation.src}) --> {translation.text} ({translation.dest})")
+                except:
+                    print("No text found")
+                    return redirect(url_for('translated'))
         return redirect(url_for('translated'))
     if "file_url" not in session or session['file_url'] == "":
         return redirect(url_for('streaming'))
@@ -164,9 +190,6 @@ def detect_motion(frameCount):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (7, 7), 0)
         timestamp = datetime.datetime.now()
-#        cv2.putText(frame, timestamp.strftime(
-#            "%A %d %B %Y %I:%M:%S%p"), (10 ,frame.shape[0] - 10),
-#            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
         md.update(gray)
         total += 1
         with lock:
