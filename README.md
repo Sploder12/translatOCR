@@ -1,6 +1,6 @@
-# Web App translating thing
+# Web App for translatOCR
 
-### Web app portion of the translator
+### Web app version of translatOCR
 
 ## So far:
 - [x] Live webcam streaming to webpage
@@ -10,6 +10,11 @@
 - [X] Find text from either image or camera (buggy)
 - [X] Translating (needs to fix the language selector)
 - [ ] Make better looking UI
+
+## How to install tesserocr:
+tesserocr never got updated past python 3.7 in the official python repository, so we need to use Anaconda/Conda to intstall the latest version of tesserocr. Once you have succesfully installed Anaconda/Conda run this to install tesserocr:
+
+ `conda install -c conda-forge tesserocr`
 
 ## Dependencies:
 * Python 3
@@ -21,6 +26,8 @@
 * NumPy
 
 * imutils
+
+* Anaconda/Conda (to install tesserocr)
 
 You can install all of the dependencies using:
 ```
