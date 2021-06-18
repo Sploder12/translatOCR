@@ -1,48 +1,12 @@
-import sys
-def progress(count, total, status=''):
-    bar_len = 12
-    filled_len = int(round(bar_len * count / float(total)))
-    percents = round(100.0 * count / float(total), 1)
-    bar = '=' * filled_len + '-' * (bar_len - filled_len)
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
-    sys.stdout.flush()
-progress(0, 14, status='Loading Translator')
-import os
-progress(1, 15, status='Loading Translator')
+import sys, os, threading, argparse, datetime, imutils, time, cv2
 from pyimagesearch.motion_detection import singlemotiondetector
-progress(2, 15, status='Loading Translator')
 from imutils.video import VideoStream
-progress(3, 15, status='Loading Translator')
 from flask import Response, Flask, render_template, request, session, redirect, url_for
-progress(4, 15, status='Loading Translator')
 from flask_dropzone import Dropzone
-progress(5, 15, status='Loading Translator')
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-progress(6, 15, status='Loading Translator')
-import threading
-progress(7, 15, status='Loading Translator')
-import argparse
-progress(8, 15, status='Loading Translator')
-import datetime
-progress(9, 15, status='Loading Translator')
-import imutils
-progress(10, 15, status='Loading Translator')
-import time
-progress(11, 15, status='Loading Translator')
-import cv2
-progress(12, 15, status='Loading Translator')
 from PIL import Image
-progress(13, 15, status='Loading Translator')
 from tesserocr import PyTessBaseAPI
-progress(14, 15, status='Loading Translator')
 from googletrans import Translator, constants
-progress(15, 15, status='Loading Translator')
-print("██╗░░░░░░█████╗░░█████╗░██████╗░██╗███╗░░██╗░██████╗░")
-print("██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║████╗░██║██╔════╝░")
-print("██║░░░░░██║░░██║███████║██║░░██║██║██╔██╗██║██║░░██╗░")
-print("██║░░░░░██║░░██║██╔══██║██║░░██║██║██║╚████║██║░░╚██╗")
-print("███████╗╚█████╔╝██║░░██║██████╔╝██║██║░╚███║╚██████╔╝")
-print("╚══════╝░╚════╝░╚═╝░░╚═╝╚═════╝░╚═╝╚═╝░░╚══╝░╚═════╝░", end="\n\n")
 
 cwd = os.getcwd()
 print("Current Directory: " + cwd, end="\n\n")
